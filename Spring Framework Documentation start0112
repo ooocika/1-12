@@ -1,0 +1,992 @@
+ApplicationContext context=new ClassPathXmlApplicationContext("services.xml",daos.xml);
+
+PetStoreService service=context.getBean("petStore",PetStoreService.class);
+
+List<String>userList=service.getUsernameList();
+
+//
+GenericApplicationContext context=new GenericApplicationContext();new XmlBeanDefinitionReader(context).loadBeanDefinitions("services.xml","daos.xml");context.refresh();
+//
+
+public class ClientService {
+  private static ClientService clientService = new ClientService();
+
+  private ClientService() {
+  }
+
+  public static ClientService createInstance() {
+    return clientService;
+
+  }
+}
+//
+
+public class DefaultServiceLocator {
+  private static ClientService clientService = new ClientService();
+
+  public ClientService createClientServiceInstance() {
+    return clientService;
+
+  }
+}
+
+//
+public class DefaultServiceLocator {
+
+  private static ClientService clientService = new ClientService();
+
+  private static AccountService accountService = new AccountService();
+
+  public ClientService createClientServiceInstance() {
+    return clientService;
+
+  }
+
+  public AccountService createAccountServiceInstance() {
+    return accountService;
+  }
+}
+//
+
+public class SimpleMovieLister {
+
+  private final MovieLister movieLister;
+
+  public SimpleMovieLister(MovieLister movieLister) {
+    this.movieFinder = movieLister;
+  }
+
+}
+//
+
+package x.y;
+
+public class ThingOne {
+  public ThingOne(ThingTwo thingTwo, ThingThree thingThree) {
+  }
+}
+
+//
+public class ExampleBean {
+
+  private final int years;
+
+  private final String ultimateAnswer;
+
+  public ExampleBean(int years, String ultimateAnswer) {
+    this.years = years;
+    this.ultimateAnswer = ultimateAnswer;
+  }
+
+}
+//
+package examples;
+
+public class ExampleBean {
+
+  @ConstructorProperties({ "years", "ultimateAnser" })
+  public ExampleBean(int years, String ultimateAnswer) {
+    this.years = years;
+    this.ultimateAnswer = ultimateAnswer;
+  }
+
+}
+
+//
+public class SimpleMovieLister {
+
+  private MovieFinder movieFinder;
+
+  public void setMovieFinder(MovieFinder movieFinder) {
+    this.movieFinder = movieFinder;
+  }
+}
+
+//
+public class ExampleBean {
+  private AnotherBean beanOne;
+
+  private YetAnotherBean beanTwo;
+
+  private int i;
+
+  public void setBeanOne(AnotherBean beanOne) {
+    this.beanOne = beanOne;
+  }
+
+  public void setBeanTwo(YetAnotherBean beanTwo) {
+    this.beanTwo = beanTwo;
+  }
+
+  public void setIntegerProperty(int i) {
+    this.i = i;
+  }
+}
+
+//
+public class ExampleBean {
+
+  private Another beanOne;
+  private YetAnother beanTwo;
+  private int i;
+
+  public ExampleBean(
+      AnotherBean anotherBean, YetAnotherBean yetAnotherBean, int i) {
+    this.beanOne = anotherBean;
+    this.beanTwo = yetAnotherBean;
+    this.i = i;
+  }
+}
+
+//
+public class ExampleBean {
+  private ExampleBean() {
+
+  }
+
+  public static Example createInstance(){
+    AnotherBean anotherBean, YetAnotherBean yetAnotherBean,. int i){
+      
+      ExampleBean eb = new Example();
+      
+      return eb;
+      }
+  }
+
+  //
+  public class SomeClass {
+    private Map<String, Float> account;
+
+    public void setAccount(Map<String, Float> account) {
+      this.account = account;
+    }
+
+  }
+
+  //
+  public class CommandManager implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
+    public Object process(Map commandState) {
+      Command command = createCommand();
+      command.execute(commandState);
+      return command.execute();
+    }
+
+    protected Command createCommand() {
+      return this.applicationContext.getBean("command", Command.class);
+    }
+
+    public void setApplicationContext(
+        ApplicationContect applicationContext) throws BeanException {
+      this.applicationContext = applicationContext;
+
+    }
+  }
+
+  //
+  public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+
+      Command command = createCommand();
+
+      command.setState(commandState);
+      return command.execute();
+
+    }
+
+    protected abstract Command createCommand();
+
+  }
+
+  //
+  public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+      Command command = createCommand();
+      command.setState(commandState);
+      return command.execute();
+    }
+
+    @Lookup("myCommand")
+    protected abstract Command createCommand();
+  }
+
+  //
+  public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+      Command command = createCommand();
+      command.setState(commandState);
+      return command.execute();
+    }
+
+    @Lookup
+    protected abstract Command createCommand();
+  }
+
+  //
+  public class MyValueCalculator {
+
+    public String computerValue(String input) {
+
+    }
+  }
+
+  //
+  public class ReplacementComputeValue implements MethodReplacer {
+
+    public Object reimplment(Object o, Method m, Object[] args)throw Throwable{
+    String input = (String) args[0];
+
+      return ..;
+    }
+    
+
+}
+
+    //
+  @SessionScope
+  @Component
+
+  @ApplicationScope
+
+  Object get(String name, ObjectFactory<?> objectFactory)
+
+  Object remove(String name)
+
+  void registerDestructionCallback(String name, Runnable destructionCallback)
+
+  String getConversationId()
+
+    void registerScope(String scopeName, Scope scope);
+
+    Scope threadScope = new SimpleThreadScope();beanFactory.registerScope("thread",threadScope);
+
+    //
+    public class ExampleBean {
+
+      public void init() {
+
+      }
+    }
+
+    //
+    public class AnotherExampleBean implements InitializingBean {
+
+      @Override
+      public void afterPropertiesSet() {
+      }
+    }
+
+    //
+    public class ExampleBean {
+
+      public void cleanup() {
+      }
+
+    }
+
+    //
+    public class AnotherExampleBean implements DisposableBean {
+
+      @Override
+      public void destory() {
+      }
+
+    }
+
+    //
+    public class DefaultBlogService implements BlogService {
+
+      private BlogDao blogDao;
+
+      public void setBlogDao(BlogDao blogDao) {
+        this.blogDao = blogDao;
+      }
+
+  public void init(){
+    if(this.blogDao == null){
+      throw new IllegalStateException("The [blogDao] property must be set"");
+    }
+  }
+
+    }
+
+    //
+
+    public interface Lifecycle {
+
+      void start();
+
+      void stop();
+
+      boolean isRunning();
+    }
+
+    public interface LifecycleProcessor extends Lifecycle {
+
+      void onRefresh();
+
+      void onClose();
+    }
+
+    //
+    public interface Phased {
+      int getPhase();
+    }
+
+    //
+    public interface SmartLifecycle extends Lifecycle, Phased {
+
+      boolean isAutoStartup();
+
+      void stop(Runnable callback);
+    }
+
+    //
+    public final class Boot {
+  public static void main(final String[] args)throw Exception{
+    ConfigurableApplicationContext context = new 
+      ClassPathXmlApplicationContext("beans.xml");
+
+    ctx.registerShutdownHook();
+
+  }
+  
+  }
+
+      //
+      public interface ApplicationContextAware {
+
+        void setApplicationContext(ApplicationContext applicationContext) throws BeansException;
+      }
+
+      //
+      public interface BeanAware {
+  void setBeanName(String name)throw BeansException;
+      }
+
+      //
+      ApplicationContextAware ApplicationEventPublisherAware
+  BeanClassLoaderAware
+  BeanFactoryAware
+  BeanNameAware
+  LoadTimeWeaversAware
+      MessageSourceAware NotificationPublisherAware
+  ResoureLoaderAware
+  ServletConfigAware ServletContextAware
+
+      //
+      public class InstantiationTracingBeanPostProcessor implements BeanPostProcessor {
+
+        public Object postProcessBeforeInitialization(Object bean, String beanName) {
+          return bean;
+        }
+
+        public Object postProcessAfterInitialization(Object bean, String beanName) {
+          System.out.println("Bean '" + beanName + "' created:" + bean.toString());
+          return bean;
+        }
+      }
+
+      //
+      public final class Boot {
+
+        public static void main(final String[] args) throws Exception {
+          ApplicationContext ctx = new ClassPathXmlApplicationContext("scripting/beans.xml");
+
+          Messager messager = ctx.getBean("messager", Messager.class);
+          System.out.println(messager);
+        }
+
+      }
+
+      //
+      public class MovieRecommender {
+        private final CustomerPreferenceDao customerPreferenceDao;
+
+        @Autowired
+        public MovieRecommender(CustomerPreferenceDao customerPreferenceDao) {
+          this.customerPreferenceDao = customerPreferenceDao;
+        }
+      }
+
+      //
+      public class SimpleMovieLister {
+        private MovieFinder movieFinder;
+
+        @Autowired
+        public void setMovieFinder(MovieFinder movieFinder) {
+          this.movieFinder = movieFinder;
+        }
+
+      }//
+
+      public class MovieRecommender {
+
+        private MovieCatalog movieCatalog;
+
+        private CustomerPreferenceDao customerPreferenceDao;
+
+        @Autowired
+        public void prepare(MovieCatalog movieCatalog,
+            CustomerPreferenceDao customerPreferenceDao) {
+          this.movieCatalog = movieCatalog;
+          this.customerPreferenceDao = customerPreferenceDao;
+        }
+      }
+
+      //
+      public class MovieRecommender {
+        private final CustomerPreferenceDao customerPreferenceDao;
+
+        @Autowired
+        private MovieCatalog movieCatalog;
+
+        @Autowired
+        public MovieRecommender(CustomerPreferenceDao customerPreferenceDao) {
+          this.custoemrPreferenceDao = customerPreferenceDao;
+        }
+
+      }
+
+      //
+      public class MovieRecommender {
+        @Autowired
+        private MovieCatalog movieCatalog;
+      }
+
+      //
+      public class MovieRecommender {
+        private Set<MovieCatalog> movieCatalogs;
+
+        @Autowired
+        public void setMovieCatalogs(Set<MovieCatalog> movieCatalogs) {
+          this.moviecatalogs = movieCatalogs;
+        }
+      }
+
+      //
+      public class SimpleMovieLister {
+        private MovieFinder movieFinder;
+
+        @Autowired(required = false)
+        public void setMovieFinder(MovieFinder movieFinder) {
+          this.movieFinder = movieFinder;
+        }
+      }
+
+      //
+
+      @Configuration
+      public class MovieConfiguration {
+
+        @Bean
+        @Primary
+        public MovieCatalog firstmovieCatalog() {
+        }
+
+        @Bean
+        public MovieCatalog secondMovieCatalog() {
+        }
+
+      }
+
+      //
+      class MovieRecommender {
+
+  @Autowired
+  private lateinit var moviewCatalog:MovieCatalog;
+
+      }
+
+      //
+      public class MovieRecommender {
+
+        @Autowired
+        @Qualifiers("main")
+        private MovieCatalog movieCatalog;
+
+      }
+
+      //
+      public class MovieRecommender {
+        private MovieCatalog movieCatalog;
+
+        private CustomerPreferenceDao customerPreferenceDao;
+
+        @Autowired
+        public void prepare(@Qualifier("main") MovieCatalog movieCatalog,
+            CustomerPrefferenceDao customerPreferenceDao) {
+          this.movieCatalog = movieCatalog;
+          this.custoemrPreferenceDao = customerPreferenceDao;
+        }
+      }
+
+      //
+      @Target({ ElementType.FIELD, ElementType.PARAMETER })
+      @Retention(RetentionPolicy.RUNTIME)
+      @Qualifier
+      public @interface Genre {
+        String value();
+      }
+
+      //
+      public class MovieRecommender {
+
+        @Autowired
+        @Genre("Action")
+        private MovieCatalog actionCatalog;
+
+        private MovieCatalog movieCatalog;
+
+        @Autowired
+        public void setComedyCatalog(@Genre("Comedy") MovieCatalog comedyCatalog) {
+          this.comedyCatalog = comedyCatalog;
+        }
+      }
+
+      //
+      @Target({ ElementType.FIEL, ElementType.PARAMETER })
+      @Retention(RetentionPolicy.RUNTIME)
+      @Qualifier
+      public @interface Offline {
+
+      }
+
+      //
+      public class MovieRecommender {
+
+        @Autowired
+        @Offline
+        private MovieCatalog movieCatalog;
+
+      }
+
+      //
+      @Target({ ElemetnType.FIELD, ElementType.PARAMETER })
+      @Retention(RetentionPolicy.RUNTIME)
+      @Qualifier
+      public @interface MovieQualifier {
+
+        String genre();
+
+        Format format();
+      }
+      //
+
+      public enum Format {
+        VHS, DVD, BLURAY
+
+      }
+
+      //
+      public class MovieRecommender {
+
+        @Autowired
+        @MovieQualifier(format = Format.VHS, genre = "Action")
+        private MovieCatalog actionVhsCatalog;
+
+        @Autowired
+        @MovieQualifier(format = Format.VHS, genre = "Comedy")
+        private MovieCatalog comedyVhsCatalog;
+        @Autowired
+        @MovieQualifier(format = Format.DVD, genre = "Action")
+        private MovieCatalog actionDvdCatalog;
+        @Autowired
+        @MovieQualifier(format = Format.BLURAY, genre = "Comedy")
+        private MovieCatalog comedyBluRayCatalog;
+        // ...
+      }
+
+      //
+      @Configuration
+      public class MyConfiguration {
+
+        @Bean
+        public StringStore stringStore() {
+          return new StringStore();
+
+        }
+
+        @Bean
+        public IntegerStore integerStore() {
+          return new IntegeStore();
+        }
+      }
+
+      //
+      @Autowired
+      private Store<String> s1;
+      @Autowired
+      private Store<Integer> s2;
+
+      //
+      @AutoWired
+      private List<Store<Integer>> s;
+      //
+
+      public class SimpleMovielister {
+
+        private MovieFinder movieFinder;
+
+        @Resource(name = "myMovieFinder")
+        public void setMovieFinder(MovieFinder movieFinder) {
+          this.movieFinder = movieFinder;
+        }
+      }
+
+      //
+      public class SimpleMovieLister {
+        private MovieFinder movieFinder;
+
+        @Resource
+        public void setMovieFinder(MovieFinder movieFinder) {
+          this.movieFinder = movieFinder;
+        }
+      }
+
+      //
+      public class MovieRecommender {
+
+        @Resource
+        private CustomerPreferenceDao customerPreferenceDao;
+
+        @Resource
+        private ApplicationContext context;
+
+        public MovieRecommender() {
+
+        }
+
+      }
+
+      //
+      @Component
+      public class MovieRecommender {
+        private final String catalog;
+
+        public MovieRecommender(@Value("${catalog.name}") String catalog) {
+          this.catalog = catalog;
+        }
+      }
+
+      //
+      @Configuration
+      @PropertySource("classpath:application.properties")
+      public class AppConfig {
+      }
+
+      //
+      @Configuration
+      public class AppConfig {
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+
+          return new PropertySourcesPlaceholderConfigurer();
+        }
+      }
+
+      //
+      @Component
+      public class MovieRecommender {
+        private final String catalog;
+
+        public MovieRecommender(@Value("${catalog.name:defaultCatalog}") String catalog) {
+
+          this.catalog = catalog;
+        }
+      }
+
+      //
+      @Configuration
+      public class AppConfig {
+
+        @Bean
+        public ConversionService conversionService() {
+          DefaultFormattingConversionService service = new DefaultFormattingConversionService();
+          conversionService.addConverter(new MyCustomConverter());
+          return conversionService;
+        }
+      }
+
+      //
+      @Component
+      public class MovieRecommender {
+
+        private final Map<String, Integer> countOfMoviesPerCatalog;
+
+        public MovieRecommender(
+            @Value(" #{{'Thriller' :100,'Comedy': 300}}") Map<String, Integer> countOfMoviesPerCatalog) {
+
+          this.countOfMoviesPerCatalog = countOfMoviesPerCatalog;
+        }
+
+      }
+
+      //
+      public class CachingMovielister {
+
+        @PostConstruct
+        public void populatMovieCache() {
+        }
+
+        @PreDestroy
+        public void clearMovieCache() {
+        }
+      }
+
+      //
+      @Target(Element.TYPE)
+      @Retention(RetentionPolicy.RUNTIME)
+      @Documented
+      @Component
+      public @interface Service {
+      }
+
+      //
+      @Target({ ElementType.TYPE, ElementType.METHOD })
+      @Retention(RetentionPolicy.RUNTIME)
+      @Documented
+      @Scope(WebApplicationContext.SCOPE_SESSION)
+      public @interface SessionScoped {
+
+        @AliasFor(annotation = Scope.class)
+        ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;
+
+      }
+
+      //
+      @Service
+      @SessionScope
+      public class SessionScopedService {
+
+      }
+
+      //
+      @Service
+      @SessionScope(proxyMode = ScopedProxyMode.INTERFSCES)
+      public class SessionScopedUserService implements UserService {
+      }
+
+      //
+      @Service
+      public class SimpleMovieLister {
+
+        private MovieFinder movieFinder;
+
+        public SimpleMovieLister(MovieFinder movieFinder) {
+          this.movieFinder = movieFinder;
+        }
+      }
+
+      //
+      @Repository
+      public class JpaMovieFinder implements MovieFinder {
+
+      }
+
+      //
+      @Configuration
+      @ComponentScan(basePackages = "org.example")
+      public class AppConfig {
+      }
+
+      //
+      @Configuration
+      @ComponentScan(basePackages = "org.example", includeFilters = @Filter(type = FilterType.REGEX, pattern = ".*Stub.*Repository"), excludeFilters = @ComponentScan.Filter(Repository.class))
+      public class AppConfig {
+      }
+
+      //
+      @Component
+      public class FactoryMethodComponent {
+
+        @Bean
+        @Qualifier("public")
+        public TestBean publicInstance() {
+          return new TestBean("publicInstance");
+        }
+
+        public void doWork() {
+
+        }
+
+      }
+
+      //
+
+      @Component
+      public class FactoryMethodComponent {
+
+        private static int i;
+
+        @Bean
+        @Qualifier("public")
+        public TestBean publicInstance() {
+          return new TestBean("publicInstance");
+        }
+
+        @Bean
+        protected TestBean protectedInstance(
+            @Qualifier("public") TestBean sqouse,
+            @Value("#{privateInstance.age}") String country) {
+          TestBean tb = new TestBean("protectedInstance", 1);
+          tb.setSpouse(spouse);
+          tb.setCountry(country);
+          return tb;
+        }
+
+        @Beam
+        private TestBean privateInstance() {
+          return new TestBean("privateInstance", i++);
+
+        }
+
+        @Bean
+        @RequestScope
+        public TestBean requestScopedInstance() {
+          return new TestBean("requestScopedInstance", 3);
+        }
+      }
+
+      //
+      @Component
+      public class FactoryMethodComponent {
+
+        @Bean
+        @Scope("prototype")
+
+        public TestBean prototypeInstance(InjectionPoint injectionPoint) {
+          return new TestBean("prototypeInstance for" +
+              injectionPoint.getMember());
+
+        }
+      }
+
+      //
+      @Service("myMovieLister")
+      public class SimpleMovieLister {
+
+      }
+
+      //
+      @Repository
+      public class MovieFinderImpl implements MovieFinder {
+      }
+
+      //
+@Configuration
+  @ComponentScan(basePackages = "org.example", nameGenerator = MyNameGenerator.class. scopeResolver = MyScopeResolver.class)
+  public class AppConfig {
+  }
+
+      //
+      @Scope("prototype")
+      @Repository
+      public class MovieFinderImpl implements MovieFinder {
+      }
+      //
+
+      @Configuration
+      @ComponentScan(basePackages = "org.example", scopedProxy = ScopeProxyMode.INTERFACES)
+
+      public class AppConfig {
+
+      }
+
+      //
+      @Component
+      @Qualifier("Action")
+      public class ActionMovieCatalog implements MovieCatalog {
+      }
+
+      //
+      //
+@Component
+  @Offline
+  public class CachingMovieCatalog implements MovieCatalog{
+    
+  }
+//
+public class SimpleMovieListener{
+  private MovieFinder movieFinder;
+
+  @Inject
+  public void setMovieFinder(MovieFinder movieFinder){
+    this.movieFinder = movieFinder;
+}
+
+  public void listMovies()[
+  this.movieFinder.findMovies();
+}
+}
+  //
+@Name("movieListener")
+  public class SimpleMovieListener{
+    private MovieFinder movieFinder;
+
+    @Inject
+    public void setMovieFinder(MovieFinder movieFinder){
+      this.movieFinder = movieFinder;
+    }
+  }
+//
+@Component
+  @ComponentScan(basePackages = "org.example")
+  public class AppConfig {
+  }
+//
+//
+Spring
+@Autowired 
+  @Inject
+  @Component
+  @Named
+  @ManagedBean
+  @Scope("singleton")
+  @Singleton
+  @Qualifier
+  @Qualifier/@Named
+  @Value
+  @Lazy
+  @ObjectFactory / Provider
+  //
+  @Configuration
+  public class AppConfig{
+
+  @Bean
+  public MyService myService(){
+    return new MyService()Impl;
+  }
+  }
+//
+public static void main(String[] args){
+  ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+  MyService myService = ctx.getBean(MyService.class);
+  myService.doStuff();
+}
+//
+public static void main(String[] args){
+
+  ApplicationContext ctx = new 
+    AnnotationConfigApplicationContext(MyServiceImpl.class,
+                                      Dependency1.class,
+                                      Dependency2.class);
+  MyService myService = ctx.getBean(MyService.class);
+  myService.doStuff();
+}
+
+//
+public static void main(String[] args){
+  AnnotationConfigApplicationContext ctx = new AnnotaionConfigApplicationContext();
+  ctx.register(AppConfig.class.OtherConfig.class);
+  ctx.register(AdditionalConfig.class);
+  ctx.refresh();
+  MyService.myService  ctx.getBean(MyService.class);
+  myService.doStuff();
+}//148P
